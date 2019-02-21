@@ -50,11 +50,16 @@ class FileCompressHaffMan{
 public:
 	//构造函数
 	FileCompressHaffMan();
+
 	void CompressFile(const string& strPath);			//文件压缩
 
 	void GetHaffmanCode(HaffmanTreeNode<Char_info>* pRoot);	//获取haffman编码
 
+	void WriteHead(FILE* DestFile, const string& strPath);			//写后缀，编码等信息
+
 	void UNCompressFile(const string& strPath);			//解压文件
+
+
 
 	vector<Char_info> _char_info;
 	

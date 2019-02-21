@@ -8,12 +8,13 @@ void TestHaffmanTree(){
 }
 
 void TestFileCompress(){
-
+	FileCompressHaffMan f;
+	f.CompressFile("1.txt");
 }
 
 int main(){
 	//TestHaffmanTree();
-
+	TestFileCompress();
 	system("pasue");
 	return 0;
 }

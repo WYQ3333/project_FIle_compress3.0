@@ -50,15 +50,23 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 	ht.CreateHaffmanTree(_char_info);
 
 	//获取haffman编码
-	fseek(Source_File, 0, SEEK_SET);			//将文件指针偏移到文件的开始位置
-
-	
-	//获取haffman编码
 	GetHaffmanCode(ht.GetRoot());
+	//fseek(Source_File, 0, SEEK_SET);			//将文件指针偏移到文件的开始位置
+
+	FILE* DestFile = fopen("1.hzp", "wb");		//打开压缩文件
+	assert(DestFile);
+
+	WriteHead(DestFile, strPath);				//往目标文件中写入后缀，字符编码等信息
+
 }
+
+
 
 void FileCompressHaffMan::GetHaffmanCode(HaffmanTreeNode<Char_info>* pRoot)	//获取haffman编码
 {
+	if (nullptr == pRoot){
+		return;//没写这个判断条件就会造成死循环
+	}
 	GetHaffmanCode(pRoot->pLeft);
 	GetHaffmanCode(pRoot->pRight);
 	if (pRoot->pLeft == nullptr&&pRoot->pRight == nullptr){
@@ -77,4 +85,30 @@ void FileCompressHaffMan::GetHaffmanCode(HaffmanTreeNode<Char_info>* pRoot)	//获
 		}
 		reverse(strCode.begin(),strCode.end());		//翻转字符串，将haffman编码写入
 	}
+}
+
+void FileCompressHaffMan::WriteHead(FILE* DestFile, const string& strPath){
+	string str_suffix = strPath.substr(strPath.rfind('.'));			//截取文件的后缀写入目标文件中
+	str_suffix += '\n';
+
+	string str_charinfo;
+	char szCount[32];
+	size_t linecount = 0;
+
+	for (size_t i = 0; i < 256; ++i){
+		if (_char_info[i]._char_count){
+			str_charinfo += _char_info[i]._ch;
+			str_charinfo += '/';
+			_itoa(_char_info[i]._char_count, szCount, 10);
+			str_charinfo += szCount;
+			str_charinfo += '\n';
+			linecount++;
+		}
+	}
+	_itoa(linecount, szCount, 10);
+	str_charinfo += szCount;
+	str_charinfo += '\n';
+
+	str_suffix += str_charinfo;
+	fwrite(str_suffix.c_str(), 1, str_suffix.size(), DestFile);
 }
