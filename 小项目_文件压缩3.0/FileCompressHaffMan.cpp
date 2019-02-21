@@ -202,25 +202,22 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 	HaffmanTree<Char_info> ht;
 	ht.CreateHaffmanTree(_char_info, _char_info[0]);
 	
-	string UNCompress = "";
+	string UNCompress = "2";
 	UNCompress += strfix;		//解压后文件的后缀
 
 	FILE* fOut = fopen(UNCompress.c_str(), "wb");
 	assert(fOut);
 
-	char* UNReadBuff = new char[1024];
-	if (UNReadBuff == nullptr){
-		cout << "动态开辟空间失败" << endl;
-		return;//申请空间失败
-	}
+	char* UNReadBuff = new char(1024);
+	
 
 	HaffmanTreeNode<Char_info>* pCur = ht.GetRoot();
 
-	size_t pos = 7;
-	size_t filesize = pCur->_weight._char_count;
+	char pos = 7;
+	long long filesize = pCur->_weight._char_count;
 
 	while (true){
-		size_t ReadSize = fread(UNReadBuff, 1, 1024, fOut);
+		size_t ReadSize = fread(UNReadBuff, 1, 1024, fIn);
 		if (ReadSize == 0){
 			break;//文件读取完毕
 		}

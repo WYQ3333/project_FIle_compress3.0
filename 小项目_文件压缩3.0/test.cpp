@@ -11,6 +11,7 @@ void TestHaffmanTree(){
 void TestFileCompress(){
 	FileCompressHaffMan f;
 	f.CompressFile("1.txt");
+	f.UNCompressFile("1.hzp");
 	_CrtDumpMemoryLeaks();//用来检测内存泄漏的
 }
 
