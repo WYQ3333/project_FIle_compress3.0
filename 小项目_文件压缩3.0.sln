@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "小项目_文件压缩3.0", "小项目_文件压缩3.0\小项目_文件压缩3.0.vcxproj", "{50A4702A-BA22-4F19-886B-FCA771CC3B5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50A4702A-BA22-4F19-886B-FCA771CC3B5F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{50A4702A-BA22-4F19-886B-FCA771CC3B5F}.Debug|Win32.Build.0 = Debug|Win32
+		{50A4702A-BA22-4F19-886B-FCA771CC3B5F}.Release|Win32.ActiveCfg = Release|Win32
+		{50A4702A-BA22-4F19-886B-FCA771CC3B5F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
