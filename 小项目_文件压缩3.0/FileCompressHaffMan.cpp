@@ -208,16 +208,17 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 	FILE* fOut = fopen(UNCompress.c_str(), "wb");
 	assert(fOut);
 
-	char* UNReadBuff = new char(1024);
+	char* pReadBuff = new char(1024);
 	
 
 	HaffmanTreeNode<Char_info>* pCur = ht.GetRoot();
 
 	char pos = 7;
+	char ch = 1;
 	long long filesize = pCur->_weight._char_count;
 
 	while (true){
-		size_t ReadSize = fread(UNReadBuff, 1, 1024, fIn);
+		size_t ReadSize = fread(pReadBuff, 1, 1024, fIn);
 		if (ReadSize == 0){
 			break;//文件读取完毕
 		}
@@ -225,7 +226,11 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 		for (size_t i = 0; i < ReadSize; ++i){
 			pos = 7;
 			for (size_t j = 0; j < 8; ++j){
-				if (UNReadBuff[i] & (1 << pos)){
+				//测试代码
+				//cout << pReadBuff[j] << endl;
+				//cout << (1 << pos) << endl;
+				//cout << (pReadBuff[j] & (1 << pos)) << endl;
+				if (pReadBuff[j] & (1 << pos)){
 					pCur = pCur->_pRight;
 				}
 				else{
@@ -243,7 +248,7 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 			}
 		}
 	}
-	delete[] UNReadBuff;
+	delete[] pReadBuff;
 	fclose(fIn);
 	fclose(fOut);
 }
