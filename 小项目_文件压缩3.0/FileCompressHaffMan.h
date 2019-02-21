@@ -20,11 +20,11 @@ struct Char_info{
 	long long _char_count;			//记录当前字符在文件中的位置
 	string _str_code;				//记录当前字符的haffman编码
 
-	Char_info operator+(const Char_info& temp){
+	Char_info operator+(const Char_info& temp)const{
 		return Char_info(temp._char_count + _char_count);
 	}
 
-	bool operator>(const Char_info& temp){
+	bool operator>(const Char_info& temp)const{
 		return _char_count > temp._char_count;
 	}
 
@@ -32,7 +32,7 @@ struct Char_info{
 		return _char_count < temp._char_count;
 	}
 
-	bool operator!=(const Char_info& temp){
+	bool operator!=(const Char_info& temp)const{
 		return _char_count != temp._char_count;
 	}
 
@@ -59,7 +59,7 @@ public:
 
 	void UNCompressFile(const string& strPath);			//解压文件
 
-
+	void GetLine(FILE* fIn,string& str);//读取一行数据
 
 	vector<Char_info> _char_info;
 	
