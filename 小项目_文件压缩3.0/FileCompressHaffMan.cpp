@@ -58,6 +58,42 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 
 	WriteHead(DestFile, strPath);				//往目标文件中写入后缀，字符编码等信息
 
+	//写压缩文件
+	//由于当前打开额源文件的文件指针已经到达文件末尾，所以需要将文件指针重置到开头
+	fseek(Source_File, 0, SEEK_SET);
+	char ch = '0';
+	int bitcount = 0;
+	while (true){
+		size_t Read_Size = fread(ReadBuff, 1, 1024, Source_File);
+		if (0 == Read_Size){
+			break;
+			//读取文件完毕，结束
+		}
+		
+		for (size_t i = 0; i < Read_Size; ++i){
+			string& char_Code = _char_info[ReadBuff[i]]._str_code;
+			for (size_t j = 0; j < char_Code.size(); ++j){
+				ch << 1;
+				if ('1' == char_Code[j]){
+					ch | 1;
+				}
+				bitcount++;
+				if (8 == bitcount){
+					fputc(ch, DestFile);
+					//一个字节一个字节写入文件
+					bitcount = 0;
+				}
+			}
+		}
+	}
+	//写完之后还有比特位剩余，则将剩余的比特位写入文件
+	if (bitcount > 0 && bitcount < 8){
+		ch << (8 - bitcount);
+		fputc(ch, DestFile);
+	}
+	delete[] ReadBuff;
+	fclose(DestFile);			//关闭压缩文件
+	fclose(Source_File);		//关闭源文件
 }
 
 
