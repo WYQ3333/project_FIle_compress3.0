@@ -26,7 +26,7 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 
 	//定义读取缓冲区,接收一次读取的数据
 
-	UCH* ReadBuff = new UCH(1024);			
+	UCH* ReadBuff = new UCH[1024];			
 
 	//定义记录的数组，用来统计文档中每个字符出现的次数
 
@@ -42,6 +42,7 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 		//统计文档中字符出现的次数
 		for (size_t i = 0; i < ReadSize; ++i){
 			_char_info[ReadBuff[i]]._char_count++;
+			cout << _char_info[ReadBuff[i]]._ch << endl;
 		}
 	}
 
@@ -53,7 +54,7 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 	GetHaffmanCode(ht.GetRoot());
 	//fseek(Source_File, 0, SEEK_SET);			//将文件指针偏移到文件的开始位置
 
-	FILE* DestFile = fopen("1.hzp", "wb");		//打开压缩文件
+	FILE* DestFile = fopen("finshFileCompress.hzp", "wb");		//打开压缩文件
 	assert(DestFile);
 
 	WriteHead(DestFile, strPath);				//往目标文件中写入后缀，字符编码等信息
@@ -70,6 +71,7 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 			//读取文件完毕，结束
 		}
 		
+		//以比特位的方式将字符编码写入到文件中
 		for (size_t i = 0; i < Read_Size; ++i){
 			string& char_Code = _char_info[ReadBuff[i]]._str_code;
 			for (size_t j = 0; j < char_Code.size(); ++j){
@@ -93,10 +95,11 @@ void FileCompressHaffMan::CompressFile(const string& strPath){
 	}
 	
 	
-
-	/*delete[] ReadBuff;*/
+	delete[] ReadBuff;
 	fclose(DestFile);			//关闭压缩文件
 	fclose(Source_File);		//关闭源文件
+
+	
 }
 
 
@@ -202,19 +205,18 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 	HaffmanTree<Char_info> ht;
 	ht.CreateHaffmanTree(_char_info, _char_info[0]);
 	
-	string UNCompress = "2";
+	string UNCompress = "finshFileCompress";
 	UNCompress += strfix;		//解压后文件的后缀
 
 	FILE* fOut = fopen(UNCompress.c_str(), "wb");
 	assert(fOut);
 
-	char* pReadBuff = new char(1024);
+	char* pReadBuff = new char[1024];
 	
 
 	HaffmanTreeNode<Char_info>* pCur = ht.GetRoot();
 
 	char pos = 7;
-	char ch = 1;
 	long long filesize = pCur->_weight._char_count;
 
 	while (true){
@@ -225,12 +227,13 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 
 		for (size_t i = 0; i < ReadSize; ++i){
 			pos = 7;
+			char ch = pReadBuff[i];
 			for (size_t j = 0; j < 8; ++j){
 				//测试代码
 				//cout << pReadBuff[j] << endl;
 				//cout << (1 << pos) << endl;
 				//cout << (pReadBuff[j] & (1 << pos)) << endl;
-				if (pReadBuff[j] & (1 << pos)){
+				if (ch&(1<<pos)){
 					pCur = pCur->_pRight;
 				}
 				else{
@@ -239,6 +242,7 @@ void FileCompressHaffMan::UNCompressFile(const string& strPath){
 
 				if (nullptr == pCur->_pLeft&&nullptr == pCur->_pRight){
 					fputc(pCur->_weight._ch, fOut);
+					pCur = ht.GetRoot();
 					filesize--;
 					if (0 == filesize){
 						break;//解压缩完成

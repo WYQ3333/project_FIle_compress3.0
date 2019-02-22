@@ -28,7 +28,7 @@ struct Char_info{
 		return _char_count > temp._char_count;
 	}
 
-	bool operator<(const Char_info& temp){
+	bool operator<(const Char_info& temp)const{
 		return _char_count < temp._char_count;
 	}
 
@@ -36,11 +36,11 @@ struct Char_info{
 		return _char_count != temp._char_count;
 	}
 
-	bool operator==(const Char_info& temp){
+	bool operator==(const Char_info& temp)const{
 		return _char_count == temp._char_count;
 	}
 
-	bool operator!(){
+	bool operator!()const{
 		return !_char_count;
 	}
 
